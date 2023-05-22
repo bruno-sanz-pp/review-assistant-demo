@@ -44,7 +44,7 @@ class BadViewController: UIViewController {
     }
 
     private func sendRequest(apiKey: String) {
-        let url = URL(string: "https://api.example.com/data")!
+        let url = URL(string: "http://api.example.com/data")!
         var request = URLRequest(url: url)
         request.setValue(apiKey, forHTTPHeaderField: "Authorization")
         

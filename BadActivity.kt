@@ -34,7 +34,7 @@ class BadActivity : AppCompatActivity() {
 
     private fun sendRequest(apiKey: String) {
         val httpClient: HttpClient = DefaultHttpClient()
-        val httpGet = HttpGet("https://api.example.com/data")
+        val httpGet = HttpGet("http://api.example.com/data")
         httpGet.addHeader("Authorization", apiKey)
 
         try {
