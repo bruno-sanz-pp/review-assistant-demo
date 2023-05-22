@@ -1,38 +1,56 @@
 import UIKit
 
 class BadViewController: UIViewController {
+    private let apiKey = "abc123"
 
-    var textView: UILabel!
-    var btnClick: UIButton!
+    private var textView: UILabel?
+    private var btnClick: UIButton?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         
-        textView = UILabel(frame: CGRect(x: 50, y: 100, width: 200, height: 50))
-        textView.text = "Initial Text"
-        view.addSubview(textView)
+        textView = UILabel()
+        textView?.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(textView!)
+        textView?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        textView?.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         
         btnClick = UIButton(type: .system)
-        btnClick.frame = CGRect(x: 50, y: 200, width: 100, height: 50)
-        btnClick.setTitle("Click Me", for: .normal)
-        view.addSubview(btnClick)
-        
-        btnClick.addTarget(self, action: #selector(clickButton), for: .touchUpInside)
+        btnClick?.translatesAutoresizingMaskIntoConstraints = false
+        btnClick?.setTitle("Click", for: .normal)
+        view.addSubview(btnClick!)
+        btnClick?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        btnClick?.topAnchor.constraint(equalTo: textView!.bottomAnchor, constant: 16).isActive = true
+        btnClick?.addTarget(self, action: #selector(onClick(_:)), for: .touchUpInside)
     }
-    
-    @objc func clickButton() {
+
+    @objc private func onClick(_ sender: UIButton) {
         let message = getMessage()
-        textView.text = message
+        textView?.text = message
+        
+        sendRequest(apiKey: apiKey)
     }
-    
-    func getMessage() -> String {
+
+    private func getMessage() -> String {
         var message = "Hello, "
-        message.append(getName())
+        message += getName()
         return message
     }
-    
-    func getName() -> String {
-        let textFieldName = UITextField(frame: CGRect(x: 50, y: 300, width: 200, height: 30))
-        return textFieldName.text ?? ""
+
+    private func getName() -> String {
+        guard let textField = view.viewWithTag(1) as? UITextField else { return "" }
+        return textField.text ?? ""
+    }
+
+    private func sendRequest(apiKey: String) {
+        let url = URL(string: "https://api.example.com/data")!
+        var request = URLRequest(url: url)
+        request.setValue(apiKey, forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            // Handle the response
+        }
+        task.resume()
     }
 }

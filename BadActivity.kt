@@ -1,4 +1,5 @@
 class BadActivity : AppCompatActivity() {
+    private val apiKey = "abc123"
 
     private var textView: TextView? = null
     private var btnClick: Button? = null
@@ -14,6 +15,8 @@ class BadActivity : AppCompatActivity() {
             override fun onClick(view: View) {
                 val message = getMessage()
                 textView?.text = message
+                
+                sendRequest(apiKey)
             }
         })
     }
@@ -27,5 +30,18 @@ class BadActivity : AppCompatActivity() {
     private fun getName(): String {
         val editTextName = findViewById<EditText>(R.id.edit_text_name)
         return editTextName.text.toString()
+    }
+
+    private fun sendRequest(apiKey: String) {
+        val httpClient: HttpClient = DefaultHttpClient()
+        val httpGet = HttpGet("https://api.example.com/data")
+        httpGet.addHeader("Authorization", apiKey)
+
+        try {
+            val response = httpClient.execute(httpGet)
+            // Handle the response
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
 }
